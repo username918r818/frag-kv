@@ -1,5 +1,7 @@
 # fragkv — устойчивое к фрагментации KV-хранилище высокой доступности
 
+[![Tests](https://github.com/username918r818/frag-kv/actions/workflows/tests.yml/badge.svg)](https://github.com/username918r818/frag-kv/actions/workflows/tests.yml)
+
 Прототип распределённого KV-хранилища для больших бинарных значений (100 МБ+).
 Разработан как часть ВКР Закусова К.Я., ИТМО, группа P3408.
 
