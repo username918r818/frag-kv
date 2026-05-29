@@ -1,0 +1,7 @@
+node_id: storage-1
+addr: ":8001"
+public_addr: "storage-1:8001"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s

@@ -1,0 +1,7 @@
+node_id: storage-4
+addr: ":8004"
+public_addr: "storage-4:8004"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s

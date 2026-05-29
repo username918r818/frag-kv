@@ -1,0 +1,214 @@
+version: "3.9"
+
+# Кластер fragkv:
+#   - 3 metadata-узла (Raft quorum)
+#   - 5 storage-узлов
+#   - Prometheus для сбора метрик
+#
+# Запуск:         docker-compose up --build -d
+# CLI с хоста:    go run ./cmd/kvctl --meta http://localhost:9000 put mykey ./file.bin
+# CLI в контейнере: docker-compose run --rm kvctl put mykey /data/file.bin
+# Grafana:        http://localhost:3000  (admin/admin)
+# Prometheus:     http://localhost:9090
+
+networks:
+  fragkv:
+    driver: bridge
+
+volumes:
+  meta1-data: {}
+  meta2-data: {}
+  meta3-data: {}
+  storage1-data: {}
+  storage2-data: {}
+  storage3-data: {}
+  storage4-data: {}
+  storage5-data: {}
+
+services:
+
+  # ---- metadata nodes -------------------------------------------------------
+
+  meta-1:
+    build:
+      context: ..
+      dockerfile: Dockerfile.metad
+    volumes:
+      - meta1-data:/meta-data
+      - ./configs/meta-1.yaml:/metad.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "9000:9000"   # HTTP API (exposed for kvctl on host)
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9000/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  meta-2:
+    build:
+      context: ..
+      dockerfile: Dockerfile.metad
+    volumes:
+      - meta2-data:/meta-data
+      - ./configs/meta-2.yaml:/metad.yaml:ro
+    networks:
+      - fragkv
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  meta-3:
+    build:
+      context: ..
+      dockerfile: Dockerfile.metad
+    volumes:
+      - meta3-data:/meta-data
+      - ./configs/meta-3.yaml:/metad.yaml:ro
+    networks:
+      - fragkv
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  # ---- storage nodes --------------------------------------------------------
+
+  storage-1:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - storage1-data:/data
+      - ./configs/storage-1.yaml:/storaged.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "8001:8001"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  storage-2:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - storage2-data:/data
+      - ./configs/storage-2.yaml:/storaged.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "8002:8002"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  storage-3:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - storage3-data:/data
+      - ./configs/storage-3.yaml:/storaged.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "8003:8003"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  storage-4:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - storage4-data:/data
+      - ./configs/storage-4.yaml:/storaged.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "8004:8004"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  storage-5:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - storage5-data:/data
+      - ./configs/storage-5.yaml:/storaged.yaml:ro
+    networks:
+      - fragkv
+    ports:
+      - "8005:8005"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+
+  # ---- storage-6: запустить для эксперимента rebalance --------------------
+  # docker-compose up -d storage-6
+
+  storage-6:
+    build:
+      context: ..
+      dockerfile: Dockerfile.storaged
+    volumes:
+      - ./configs/storage-6.yaml:/storaged.yaml:ro
+    tmpfs:
+      - /data
+    networks:
+      - fragkv
+    ports:
+      - "8006:8006"
+    depends_on:
+      meta-1:
+        condition: service_healthy
+    profiles:
+      - rebalance   # только с: docker-compose --profile rebalance up storage-6
+
+  # ---- kvctl / bench -------------------------------------------------------
+
+  bench:
+    build:
+      context: ..
+      dockerfile: Dockerfile.kvctl
+    entrypoint: ["/bench"]
+    command: ["--meta", "http://meta-1:9000", "--out", "/results", "--scenario", "all", "--keys", "10"]
+    volumes:
+      - ../experiments/results:/results
+      - /var/run/docker.sock:/var/run/docker.sock  # chaos monkey needs docker
+    networks:
+      - fragkv
+    depends_on:
+      storage-1:
+        condition: service_started
+      storage-2:
+        condition: service_started
+      storage-3:
+        condition: service_started
+      prometheus:
+        condition: service_healthy
+    profiles:
+      - bench   # запуск: docker-compose --profile bench run --rm bench
+
+  # ---- prometheus -----------------------------------------------------------
+
+  prometheus:
+    image: prom/prometheus:v2.54.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - fragkv
+    ports:
+      - "9090:9090"
+    depends_on:
+      - storage-1
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

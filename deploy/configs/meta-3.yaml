@@ -1,0 +1,15 @@
+node_id: meta-3
+addr: ":9000"
+data_dir: /meta-data
+raft_addr: ":9001"
+raft_advertise_addr: "meta-3:9001"
+bootstrap: false
+peers:
+  - id: meta-1
+    raft_addr: "meta-1:9001"
+  - id: meta-2
+    raft_addr: "meta-2:9001"
+replication_factor: 3
+chunk_size_bytes: 8388608
+placement_strategy: weighted
+dead_threshold: 15s

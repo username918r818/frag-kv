@@ -1,0 +1,7 @@
+node_id: storage-6
+addr: ":8006"
+public_addr: "storage-6:8006"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s

@@ -1,0 +1,7 @@
+node_id: storage-5
+addr: ":8005"
+public_addr: "storage-5:8005"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s

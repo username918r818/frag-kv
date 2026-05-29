@@ -1,0 +1,11 @@
+name: loadbalance
+description: "Равномерность нагрузки: CV = std/mean использования дисков"
+meta_addr: http://meta-1:9000
+output_dir: /results
+workers: 8
+write_quorum: 2
+value_size_mb: 100
+num_keys: 50
+# Запускать три раза с разным placement_strategy в deploy/configs/meta-1.yaml:
+#   consistent_hash | rendezvous | weighted
+placement_strategies: [consistent_hash, rendezvous, weighted]

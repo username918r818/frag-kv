@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: fragkv-storage
+    static_configs:
+      - targets:
+          - storage-1:8001
+          - storage-2:8002
+          - storage-3:8003
+          - storage-4:8004
+          - storage-5:8005
+          - storage-6:8006
+    metrics_path: /metrics
+
+  - job_name: fragkv-meta
+    static_configs:
+      - targets:
+          - meta-1:9000
+          - meta-2:9000
+          - meta-3:9000
+    metrics_path: /metrics

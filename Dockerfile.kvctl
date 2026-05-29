@@ -1,0 +1,16 @@
+FROM golang:1.25-alpine AS builder
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /kvctl ./cmd/kvctl
+RUN CGO_ENABLED=0 go build -o /bench ./experiments/harness/main
+
+FROM alpine:3.20
+# docker CLI для chaos monkey — bench убивает узлы напрямую через Docker socket
+RUN apk add --no-cache docker-cli
+COPY --from=builder /kvctl /kvctl
+COPY --from=builder /bench /bench
+COPY experiments/scenarios /scenarios
+VOLUME ["/results"]
+ENTRYPOINT ["/kvctl"]

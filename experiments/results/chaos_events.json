@@ -1,0 +1,97 @@
+{
+  "events": [
+    {
+      "elapsed_sec": 27,
+      "node": "deploy-storage-3-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 39,
+      "node": "deploy-storage-3-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 49,
+      "node": "deploy-storage-3-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 67,
+      "node": "deploy-storage-3-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 78,
+      "node": "deploy-storage-3-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 96,
+      "node": "deploy-storage-3-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 117,
+      "node": "deploy-storage-1-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 136,
+      "node": "deploy-storage-1-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 161,
+      "node": "deploy-storage-2-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 178,
+      "node": "deploy-storage-2-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 192,
+      "node": "deploy-storage-4-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 212,
+      "node": "deploy-storage-4-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 235,
+      "node": "deploy-storage-1-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 245,
+      "node": "deploy-storage-1-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 259,
+      "node": "deploy-storage-4-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 271,
+      "node": "deploy-storage-4-1",
+      "action": "restore"
+    },
+    {
+      "elapsed_sec": 283,
+      "node": "deploy-storage-1-1",
+      "action": "kill"
+    },
+    {
+      "elapsed_sec": 300,
+      "node": "deploy-storage-1-1",
+      "action": "restore"
+    }
+  ],
+  "integrity_pct": 100,
+  "integrity_ok": 247,
+  "integrity_all": 247
+}

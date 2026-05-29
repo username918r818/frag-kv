@@ -1,0 +1,14 @@
+name: rebalance
+description: "Объём перемещения данных при добавлении 6-го узла"
+meta_addr: http://meta-1:9000
+output_dir: /results
+workers: 4
+write_quorum: 2
+value_size_mb: 200
+num_keys: 100
+# После заполнения: docker compose --profile rebalance up -d storage-6
+new_node:
+  id: storage-6
+  addr: "storage-6:8006"
+  total_bytes: 10737418240
+settle_secs: 15

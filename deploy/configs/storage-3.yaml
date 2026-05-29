@@ -1,0 +1,7 @@
+node_id: storage-3
+addr: ":8003"
+public_addr: "storage-3:8003"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s

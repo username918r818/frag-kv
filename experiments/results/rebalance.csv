@@ -1,0 +1,2 @@
+total_bytes,moved_bytes,fraction_moved,duration_ms,expected_fraction,measure_method
+6291456000,1426063360,0.2267,30979,0.0000,prometheus_counter_storage6

@@ -1,0 +1,8 @@
+name: throughput
+description: "Пропускная способность PUT/GET для значений разного размера"
+meta_addr: http://meta-1:9000
+output_dir: /results
+workers: 4
+write_quorum: 2
+value_sizes_mb: [1, 10, 100]
+num_values: 10

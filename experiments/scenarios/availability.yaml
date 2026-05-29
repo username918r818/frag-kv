@@ -1,0 +1,14 @@
+name: availability
+description: "Доступность при последовательном отказе узлов (0, 1, 2)"
+meta_addr: http://meta-1:9000
+output_dir: /results
+workers: 4
+write_quorum: 2
+value_size_mb: 100
+num_keys: 20
+# После записи: docker stop fragkv-deploy-storage-1-1, затем storage-2-1
+kill_commands:
+  - "docker stop fragkv-deploy-storage-1-1"
+  - "docker stop fragkv-deploy-storage-2-1"
+dead_threshold_secs: 15
+measure_delay_secs: 3

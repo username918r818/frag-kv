@@ -1,0 +1,7 @@
+node_id: storage-2
+addr: ":8002"
+public_addr: "storage-2:8002"
+data_dir: /data
+meta_addr: http://meta-1:9000
+total_bytes: 10737418240
+heartbeat_interval: 5s
